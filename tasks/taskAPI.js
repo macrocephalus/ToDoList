@@ -24,21 +24,21 @@ router.get('/page', function(req, res){
         return res.status(400).send("Error parameters");
     }
 
-    const tasks = taskModul.fetchTask();
-
-    const sampleEnd = page * limit;
-    const sampleStart = sampleEnd - limit;
-
-    const simple = tasks.filter( (t)=>t.id >=sampleStart && t.id < sampleEnd)
-    //res.send(`page = ${page}  limit = ${limit}   sampleStart = ${sampleStart}  sampleEnd = ${sampleEnd} \n`);
+    const simple = taskModul.queryTaskPage(page, limit)
     res.send(simple);
 });
 
 router.get('/:id',function(req, res){
     const idTask = parseInt(req.params.id);
 
-    let task = tasks.find(t=>t.id == idTask);
-    if(!task || task ==null)
+    if (Number.isNaN(idTask))
+    {
+        return res.status(400).send("Error parameters");
+    }
+
+    let task = taskModul.getTaskId(idTask);
+
+    if(!task || task == null || task ==[])
     {
         //res.status(404).send("The task not found");
         res.status(404);
@@ -48,15 +48,15 @@ router.get('/:id',function(req, res){
     res.send(task);
 });
 
-router.post('/tasks', function(req, res){
+router.post('/', function(req, res){
+  
+    /*const shemaValid = {
+        title : Joi.string().min(3).required()
+    }*/
     const task = {
         id : tasks.length,
         title : req.body.title
     }
-
-    /*const shemaValid = {
-        title : Joi.string().min(3).required()
-    }*/
 
     const schema = Joi.object({
         title: Joi.string().min(3).max(300).required()

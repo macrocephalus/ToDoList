@@ -14,9 +14,20 @@ function fetchTask() {
     }
 };
 
+
 function addTask(title)
 {
+    const tasks = fetchTask();
 
+    const task = {
+        id : tasks.length,
+        title : title
+    }
+
+    tasks.push(task);
+    saveTask(tasks);
+
+    return task;
 };
 
 function saveTask (tasks) {
@@ -28,10 +39,33 @@ function saveTask (tasks) {
     }
 };
 
+function queryTaskPage(page, limit) {
+
+    const tasks = fetchTask();
+
+    const sampleEnd = page * limit;
+    const sampleStart = sampleEnd - limit;
+
+    const simple = tasks.filter( (t)=>t.id >=sampleStart && t.id < sampleEnd) // спробувати зробити що приймаэ функцію
+    //res.send(`page = ${page}  limit = ${limit}   sampleStart = ${sampleStart}  sampleEnd = ${sampleEnd} \n`);
+    return simple;
+} 
+
+function getTaskId(idTask) {
+
+    const tasks = fetchTask();
+
+    const task = tasks.find(t=>t.id == idTask);
+
+    return task;
+}
+
 module.exports = {
     addTask,
     //deleteTask,
     fetchTask,
+    queryTaskPage,
+    getTaskId,
     //getTask
     //logTask,
     //saveTask
