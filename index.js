@@ -1,12 +1,12 @@
 const express = require("express");
-//const Joi = require('joi');
-//const  taskModul = require('./tasks/task');
 
 var taskAPIRouter = require('./tasks/taskAPI');
+var indexRouter = require('./tasks/index');
 
 const app = express();
 app.use(express.json());
 
+app.use('/', indexRouter);
 app.use('/api/tasks', taskAPIRouter);
 
 

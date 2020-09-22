@@ -1,5 +1,10 @@
+const express = require("express");
 
-// router.get('/',function(req, res){
-//     //res.send('INDEX');
-//     res.redirect(301,'/api/tasks');
-// });
+const router = express.Router();
+
+router.get('/',function(req, res, next){
+    //res.send('INDEX');
+    res.redirect(301,'/api/tasks');
+});
+
+module.exports = router;

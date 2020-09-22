@@ -4,10 +4,6 @@ const taskModul = require('../tasks/task'); //???? для відносного �
 
 const router = express.Router();
 
-
-
-const tasks = taskModul.fetchTask();
-
 router.get('/', function(req, res){
     
     const tasks = taskModul.fetchTask();
@@ -15,7 +11,7 @@ router.get('/', function(req, res){
     res.send(tasks);
 });
 
-router.get('/page', function(req, res){
+router.get('/page', function(req, res, next){
 
     const { page = 1, limit = 10 } = req.query;
 
@@ -28,7 +24,7 @@ router.get('/page', function(req, res){
     res.send(simple);
 });
 
-router.get('/:id',function(req, res){
+router.get('/:id',function(req, res, next){
     const idTask = parseInt(req.params.id);
 
     if (Number.isNaN(idTask))
@@ -36,7 +32,7 @@ router.get('/:id',function(req, res){
         return res.status(400).send("Error parameters");
     }
 
-    let task = taskModul.getTaskId(idTask);
+    let task = taskModul.getTask(idTask);
 
     if(!task || task == null || task ==[])
     {
@@ -48,22 +44,13 @@ router.get('/:id',function(req, res){
     res.send(task);
 });
 
-router.post('/', function(req, res){
+router.post('/', function(req, res, next){
   
-    /*const shemaValid = {
-        title : Joi.string().min(3).required()
-    }*/
-    const task = {
-        id : tasks.length,
-        title : req.body.title
-    }
-
     const schema = Joi.object({
         title: Joi.string().min(3).max(300).required()
     });
 
     const valid = schema.validate(req.body);
-
 
     if(valid.error)
     {
@@ -71,38 +58,40 @@ router.post('/', function(req, res){
         return valid.error;
     }
 
-    tasks.push(task);
+    const task = taskModul.addTask(req.body.title);
+
     res.send(task);
 });
 
-router.put('/:id', function (req, res) {
+router.put('/:id', function (req, res, next) {
     idTask = parseInt(req.params.id);
 
-    let task = tasks.find(t=>t.id == idTask);
+    const schema = Joi.object({
+        title: Joi.string().min(3).max(300).required()
+    });
+
+    const valid = schema.validate(req.body);
+
+    if(valid.error)
+    {
+        res.status(400).send(valid.error);
+        return valid.error;
+    }
+
+    const task = taskModul.editTask(idTask, req.body.title);
+
     if(!task || task == null)
     {
-        //res.status(404).send("The task not found");
         res.status(404);
         return res.send(`The task  id=${idTask} not found`);
     }
 
-    const schema = Joi.object({
-        title: Joi.string().min(3).max(300).required()
-    });
+    console.log(`edit task id ${idTask}`);
 
-    const valid = schema.validate(req.body);
-
-    if(valid.error)
-    {
-        res.status(400).send(valid.error);
-        return valid.error;
-    }
-
-    task.title = req.body.title;
     res.send(task);
 });
 
-router.delete('/:id',function (req, res) {
+router.delete('/:id',function (req, res, next) {
    
     const idTask = parseInt(req.params.id);
 
@@ -111,17 +100,14 @@ router.delete('/:id',function (req, res) {
         return res.status(400).send("Error parameters");
     }
 
-    const idDelete = tasks.findIndex(t => t.id === idTask);
-
-    //res.send("YES ELEMENT" + idTask + "   " + idDelete,);
-    if (idDelete > -1)
+    const task = taskModul.deleteTask(idTask);
+    
+    if (task != null)
     {
-        //const task = tasks[idDelete];
-        const task = tasks.splice(idDelete, 1);
         res.send(task);
     }else{
         res.status(404).send("No found element");
-    }
+    }  
     
 });
 

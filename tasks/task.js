@@ -1,11 +1,16 @@
 const fs = require('fs');
 
-
 const patchParams = './tasks.json'
-//повертає список тасків з файлу
+
+/**
+ * Повертає список тасків з файлу
+ */
 function fetchTask() {
     try {
-       let tasksStrng = fs.readFileSync('tasks.json');
+       let tasksStrng = fs.readFileSync(patchParams);
+
+       console.log(`JSON read file`);
+
        return JSON.parse(tasksStrng);
         
     } catch (error) {
@@ -14,7 +19,10 @@ function fetchTask() {
     }
 };
 
-
+/**
+ * 
+ * Додає нове завдання
+ */
 function addTask(title)
 {
     const tasks = fetchTask();
@@ -27,9 +35,14 @@ function addTask(title)
     tasks.push(task);
     saveTask(tasks);
 
+    console.log("Add");
+    logTask(task);
+
     return task;
 };
-
+/** 
+ * Зберігає масив завданнь у файл JSON
+*/
 function saveTask (tasks) {
     try {
         fs.writeFileSync(patchParams, JSON.stringify(tasks));
@@ -39,6 +52,9 @@ function saveTask (tasks) {
     }
 };
 
+/**
+ *  Запит який повертає масив значень по номеру сторінки і кільсоксті записів
+ */
 function queryTaskPage(page, limit) {
 
     const tasks = fetchTask();
@@ -46,27 +62,86 @@ function queryTaskPage(page, limit) {
     const sampleEnd = page * limit;
     const sampleStart = sampleEnd - limit;
 
-    const simple = tasks.filter( (t)=>t.id >=sampleStart && t.id < sampleEnd) // спробувати зробити що приймаэ функцію
-    //res.send(`page = ${page}  limit = ${limit}   sampleStart = ${sampleStart}  sampleEnd = ${sampleEnd} \n`);
+    const simple = tasks.filter( (t)=>t.id >=sampleStart && t.id < sampleEnd);
+   
     return simple;
 } 
 
-function getTaskId(idTask) {
+/**
+ * Повертає таск по id
+ */
+function getTask(idTask) {
 
     const tasks = fetchTask();
 
     const task = tasks.find(t=>t.id == idTask);
 
+    console.log("Get Task");
+    logTask(task);
+
     return task;
+}
+
+/**
+ * Редагує таск по id
+ */
+function editTask(idTask, title) {
+
+    const tasks = fetchTask();
+    let task = tasks.find(t=>t.id == idTask);
+
+    if(!task || task == null)
+    {
+        return null;
+    }
+
+    task.title = title;
+    saveTask(tasks);
+
+    console.log("Edit Task");
+    logTask(task);
+
+
+    return task;
+}
+
+/**
+ * Видаляє тас по id
+ */
+function deleteTask(idTask) {
+
+    const tasks = fetchTask();
+
+    const idDelete = tasks.findIndex(t => t.id === idTask);
+
+    if (idDelete > -1)
+    {
+        const task = tasks.splice(idDelete, 1);
+        saveTask(tasks);
+
+        console.log("Delete Task");
+        logTask(task);  
+
+        return task;
+    }else{
+        return null;
+    }
+}
+/**
+ * Виведнння таску в консоль
+ */
+function logTask(task) {
+    console.log('----------');
+    console.log(`id: ${task.id}`);
+    console.log(`title: ${task.title}`);
+    
 }
 
 module.exports = {
     addTask,
-    //deleteTask,
+    deleteTask,
     fetchTask,
     queryTaskPage,
-    getTaskId,
-    //getTask
-    //logTask,
-    //saveTask
+    getTask,
+    editTask,
 };
