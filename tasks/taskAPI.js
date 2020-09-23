@@ -4,14 +4,14 @@ const taskModul = require('../tasks/task'); //???? для відносного �
 
 const router = express.Router();
 
-router.get('/', function(req, res){
+router.get('/', (req, res) => {
     
     const tasks = taskModul.fetchTask();
 
     res.send(tasks);
 });
 
-router.get('/page', function(req, res, next){
+router.get('/page', (req, res) => {
 
     const { page = 1, limit = 10 } = req.query;
 
@@ -24,7 +24,7 @@ router.get('/page', function(req, res, next){
     res.send(simple);
 });
 
-router.get('/:id',function(req, res, next){
+router.get('/:id',(req, res) => {
     const idTask = parseInt(req.params.id);
 
     if (Number.isNaN(idTask))
@@ -34,7 +34,7 @@ router.get('/:id',function(req, res, next){
 
     let task = taskModul.getTask(idTask);
 
-    if(!task || task == null || task ==[])
+    if(!task || task == null || task.length<=0)
     {
         //res.status(404).send("The task not found");
         res.status(404);
@@ -44,7 +44,7 @@ router.get('/:id',function(req, res, next){
     res.send(task);
 });
 
-router.post('/', function(req, res, next){
+router.post('/', (req, res) => {
   
     const schema = Joi.object({
         title: Joi.string().min(3).max(300).required()
@@ -63,7 +63,7 @@ router.post('/', function(req, res, next){
     res.send(task);
 });
 
-router.put('/:id', function (req, res, next) {
+router.put('/:id', (req, res) => {
     idTask = parseInt(req.params.id);
 
     const schema = Joi.object({
@@ -91,7 +91,7 @@ router.put('/:id', function (req, res, next) {
     res.send(task);
 });
 
-router.delete('/:id',function (req, res, next) {
+router.delete('/:id', (req, res) => {
    
     const idTask = parseInt(req.params.id);
 
