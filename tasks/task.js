@@ -74,7 +74,10 @@ function getTask(idTask) {
 
     const tasks = fetchTask();
 
-    const task = tasks.find(t=>t.id == idTask);
+    const task = tasks.find(t=>t.id === idTask);
+
+    if (task === undefined)
+        return undefined;
 
     console.log("Get Task");
     logTask(task);
@@ -88,7 +91,7 @@ function getTask(idTask) {
 function editTask(idTask, title) {
 
     const tasks = fetchTask();
-    let task = tasks.find(t=>t.id == idTask);
+    let task = tasks.find(t=>t.id === idTask);
 
     if(!task || task == null)
     {

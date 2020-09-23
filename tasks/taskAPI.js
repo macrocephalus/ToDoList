@@ -34,7 +34,7 @@ router.get('/:id',(req, res) => {
 
     let task = taskModul.getTask(idTask);
 
-    if(!task || task == null || task.length<=0)
+    if(!task || task === null || task === undefined)
     {
         //res.status(404).send("The task not found");
         res.status(404);
