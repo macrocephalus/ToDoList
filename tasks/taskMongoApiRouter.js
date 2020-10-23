@@ -1,23 +1,13 @@
 const express = require("express");
+
 const Joi = require('joi');
+
 const taskModul = require('../tasks/taskControllerMongo'); 
+
 const router = express.Router();
 
-router.get('/', (req, res) => {
 
-    const task = {
-        title : "zavdania"
-    }
-     taskModul.saveTask(task)
-        .then((taskData)=>{ console.log(`Task data = ${taskData}`); res.send(taskData);})
-        .catch((reject) => {
-            console.log("rejectSave:" + reject);
-        });
-  
- 
-});
-
-router.get('/page', (req, res) => {
+router.get('/todo', (req, res) => {
 
     const { page = 1, limit = 10 } = req.query;
 
@@ -30,7 +20,7 @@ router.get('/page', (req, res) => {
     res.send(simple);
 });
 
-router.get('/:id',(req, res) => {
+router.get('todo/:id',(req, res) => {
     const idTask = parseInt(req.params.id);
 
     if (Number.isNaN(idTask))
@@ -50,7 +40,7 @@ router.get('/:id',(req, res) => {
     res.send(task);
 });
 
-router.post('/', (req, res) => {
+router.post('/todo', (req, res) => {
   
     const schema = Joi.object({
         title: Joi.string().min(3).max(300).required()
@@ -73,10 +63,11 @@ router.post('/', (req, res) => {
     })
     .catch((err) => {
             console.log("rejectSave:" + err);
+            //висести ошибку
         });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/todo/:id', (req, res) => {
     idTask = parseInt(req.params.id);
 
     const schema = Joi.object({
@@ -104,7 +95,7 @@ router.put('/:id', (req, res) => {
     res.send(task);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('todo/:id', (req, res) => {
    
     const idTask = parseInt(req.params.id);
 
