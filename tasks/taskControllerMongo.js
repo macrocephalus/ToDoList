@@ -32,20 +32,20 @@ async function addTask(titleData)
 
     const task = {
         title : titleData
-    }
+    };
 
     await saveTask(task)         //тут потрібно await ???
-        .then((taskData)=>{ 
-
+        .then((taskData) => { 
             console.log("Add");
+            
             logTask(taskData);
         
             return taskData;
          })
-        .catch((reject) => {
+        .catch((err) => {
             console.log("rejectSave:" + reject);
 
-            return reject;
+            return Promise.reject(err);
         });
 };
 /** 
@@ -54,16 +54,22 @@ async function addTask(titleData)
 
 //async function saveTask (tasks) {
 async function saveTask (taskData) {
-    const task = new Task(taskData);
- 
-    try {
-        const result = await task.save();
-        console.log(result);
 
-        return result;
-    }catch (err) {
-        console.log(err.message)
-    }
+    const task = new Task(taskData);
+
+    return task.save();
+ 
+    // try {
+    //     const result = await task.save();
+    //     console.log(result);
+
+    //     return Promise.resolve(result);
+
+    // } catch (err) {
+    //     console.log(err.message)
+
+    //     return Promise.reject(err);
+    // }
 
 };
 
