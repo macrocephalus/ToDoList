@@ -34,7 +34,7 @@ async function addTask(titleData)
         title : titleData
     };
 
-    await saveTask(task)         //тут потрібно await ???
+    return saveTask(task)         //тут потрібно await ???
         .then((taskData) => { 
             console.log("Add");
             
@@ -54,7 +54,6 @@ async function addTask(titleData)
 
 //async function saveTask (tasks) {
 async function saveTask (taskData) {
-
     const task = new Task(taskData);
 
     return task.save();

@@ -61,6 +61,7 @@ router.post('/', (req, res) => {
     if(valid.error)
     {
         res.status(400).send(valid.error);
+
         return valid.error;
     }
 
@@ -69,13 +70,10 @@ router.post('/', (req, res) => {
 
         console.log("PUT DATA:" + taskData);
         res.send(taskData);
-        
     })
-    .catch((reject) => {
-            console.log("rejectSave:" + reject);
+    .catch((err) => {
+            console.log("rejectSave:" + err);
         });
-
-   
 });
 
 router.put('/:id', (req, res) => {
