@@ -2,7 +2,7 @@ const express = require("express");
 
 const taskAPIRouter = require('./tasks/json_metod/taskAPI');
 const indexRouter = require('./tasks/index');
-const taskMongoAPIRouter = require('./tasks/mongo_metod/taskMongoApiRouter');
+const taskController = require('./tasks/mongo_metod/taskController');
 
 const mongoose = require('mongoose');
 
@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use('/', indexRouter);
 app.use('/api/tasks', taskAPIRouter);
-app.use('/api/mongo', taskMongoAPIRouter);
+app.use('/api/mongo', taskController);
 
 
 const PORT = process.env.PORT||3000;
