@@ -33,8 +33,7 @@ router.get('/todo/:id', (req, res) => {
     const idTask = req.params.id;
    
     taskModul.getTask(idTask)
-    .then((taskData)=>
-        {
+    .then((taskData) => {
             if (!taskData) { 
                 return apiResponse.notFoundResponse(res, "id not found response",);
             }
@@ -110,7 +109,7 @@ router.delete('/todo/:id', (req, res) => {
     const idTask = req.params.id;
 
     taskModul.deleteTask(idTask)
-    .then((taskData)=>{
+    .then((taskData) => {
         console.log("DELETE DATA:");
         console.error(taskData);
 
