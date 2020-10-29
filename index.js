@@ -9,7 +9,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-const MONGODB_URL = process.env.MONGODB_URL || 'mongodb+srv://botak:asdfghjkl123@cluster0.wtkub.mongodb.net/todos?retryWrites=true&w=majority'
+const MONGODB_URL = process.env.MONGODB_URL || 'mongodb+srv://botak:asdfghjkl123@cluster0.wtkub.mongodb.net/todos?retryWrites=true&w=majority';
 
 mongoose.connect(
     MONGODB_URL, 
