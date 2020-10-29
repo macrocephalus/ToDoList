@@ -1,5 +1,5 @@
 const successResponse = function (res, msg) {
-	var data = {
+	const data = {
 		status: true,
 		message: msg
 	};
@@ -8,7 +8,7 @@ const successResponse = function (res, msg) {
 };
 
 const successResponseWithData = function (res, msg, data) {
-	var resData = {
+	const resData = {
 		status: true,
 		message: msg,
 		data: data
@@ -18,7 +18,7 @@ const successResponseWithData = function (res, msg, data) {
 };
 
 const errorResponse = function (res, msg) {
-	var data = {
+	const data = {
 		status: false,
 		message: msg,
 	};
@@ -27,7 +27,7 @@ const errorResponse = function (res, msg) {
 };
 
 const notFoundResponse = function (res, msg) {
-	var data = {
+	const data = {
 		status: false,
 		message: msg,
 	};
@@ -36,7 +36,7 @@ const notFoundResponse = function (res, msg) {
 };
 
 const validationErrorWithData = function (res, msg, data) {
-	var resData = {
+	const resData = {
 		status: false,
 		message: msg,
 		data: data

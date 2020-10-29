@@ -2,9 +2,9 @@ const express = require("express");
 
 const Joi = require('joi');
 
-const taskModul = require('./taskControllerMongo'); 
-
 const apiResponse = require('../helpers/apiResponse');
+
+const taskModul = require('./taskControllerMongo'); 
 
 const router = express.Router();
 
@@ -15,42 +15,40 @@ router.get('/todo', (req, res) => {
     if (Number.isNaN(page) || Number.isNaN(limit) || page <= 0 || limit <= 0)
     {
        // res.status(400).send("Error parameters");
-        return apiResponse.validationErrorWithData(res,"Error parameters",null);
+        return apiResponse.validationErrorWithData(res, "Error parameters",null);
     }
 
     taskModul.queryTaskPage(page, limit)
-    .then(taskData=>
+    .then(taskData =>
         {
             console.log("Паггінація");
 
-            return apiResponse.successResponseWithData(res,"pagination",taskData);
+            return apiResponse.successResponseWithData(res, "pagination",taskData);
         }
     )
     .catch(
-        //вывести помилку!!!!!!!!
-          
-             (err)=>{
+             (err) => {
                 console.log("Errrror");
                 console.log(err);
 
-                return apiResponse.errorResponse(res,"Internal Server Error ");
+                return apiResponse.errorResponse(res, "Internal Server Error ");
              }
         );
 });
 
-router.get('/todo/:id',(req, res) => {
+router.get('/todo/:id', (req, res) => {
 
     const idTask = req.params.id;
     console.log("YRAAA");
    
-    taskModul.getTask(idTask).
-    then(taskData=>
+    taskModul.getTask(idTask)
+    .then(taskData=>
         {
             if (!taskData)
             {
-                return apiResponse.notFoundResponse(res,"id not found response",);
+                return apiResponse.notFoundResponse(res, "id not found response",);
             }
-            return apiResponse.successResponseWithData(res,"get:id",taskData);
+            return apiResponse.successResponseWithData(res, "get:id", taskData);
         }
     )
     .catch(
@@ -58,7 +56,7 @@ router.get('/todo/:id',(req, res) => {
           
              (err)=>{
                 console.log("Errrror");
-                return apiResponse.errorResponse(res,"Internal Server Error ");
+                return apiResponse.errorResponse(res, "Internal Server Error ");
             }
         );
 });
@@ -73,18 +71,23 @@ router.post('/todo', (req, res) => {
 
     if(valid.error)
     {
+
         return apiResponse.validationErrorWithData(res, "Not valid: ", req.body);
+
     }
 
     console.log(`reg body ${req.body.title}`);
-    taskModul.addTask(req.body.title).then((taskData)=>{
+    taskModul.addTask(req.body.title)
+    .then( (taskData) => {
 
         console.log("POST DATA:" + taskData);
-        return apiResponse.successResponseWithData(res,"post",taskData);
+
+        return apiResponse.successResponseWithData(res, "post",taskData);
     })
-    .catch((err) => {
+    .catch( (err) => {
             console.log("rejectSave:" + err);
-            return apiResponse.errorResponse(res,"Internal Server Error ");
+
+            return apiResponse.errorResponse(res, "Internal Server Error ");
         });
 });
 
@@ -99,23 +102,30 @@ router.put('/todo/:id', (req, res) => {
 
     if(valid.error)
     {
-        res.status(400).send(valid.error);
-        return valid.error;
+        console.error(valid.error);
+        //res.status(400).send(valid.error);
+        return apiResponse.validationErrorWithData(res, "Not valid: ", req.body);
     }
 
-    taskModul.editTask(idTask, req.body.title).then(
-        (taskData)=>{
+    taskModul.editTask(idTask, req.body.title)
+    .then( (taskData) => {
             if (!taskData)
             {
-                return  res.status(400).send("nofound element");
+
+                return apiResponse.notFoundResponse(res, "not found object");
+
             }
         console.log("PUT DATA:");
         console.log(taskData);
-        res.send(taskData);
+
+        return apiResponse.successResponseWithData(res, "put",taskData);
+
         }
-    ).catch((err) => {
-        console.log("rejectSave:" + err);
-        //висести ошибку!!!!!
+    ).catch( (err) => {
+        console.error(err);
+
+        return apiResponse.errorResponse(res, "Internal Server Error ");
+
     });
 });
 
@@ -129,14 +139,16 @@ router.delete('/todo/:id', (req, res) => {
         console.log(taskData);
         //res.send(taskData);
         if (taskData.deletedCount === 0) {
-            return res.json('No quote to delete')
+
+            return apiResponse.notFoundResponse(res, "not found object");
+
           }
-        res.json(taskData);
+          return apiResponse.successResponseWithData(res, "delete", taskData);
     })
     .catch((err) => {
-        console.log("rejectSave:" + err);
-        //висести ошибку!!!!!
-       // res.status(404).send(`No found element err = ${err}`);
+        console.error(err);
+
+        return apiResponse.errorResponse(res, "Internal Server Error ");
     });
 });
 
