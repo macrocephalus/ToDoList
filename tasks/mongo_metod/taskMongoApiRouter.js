@@ -20,20 +20,17 @@ router.get('/todo', (req, res) => {
             console.log("Паггінація");
 
             return apiResponse.successResponseWithData(res, "pagination", taskData);
-        }
-    )
+        })
     .catch((err) => {
                 console.log("Errrror");
                 console.log(err);
 
                 return apiResponse.errorResponse(res, "Internal Server Error");
-             }
-        );
+             });
 });
 
 router.get('/todo/:id', (req, res) => {
     const idTask = req.params.id;
-    console.log("YRAAA");
    
     taskModul.getTask(idTask)
     .then((taskData)=>
@@ -43,10 +40,9 @@ router.get('/todo/:id', (req, res) => {
             }
 
             return apiResponse.successResponseWithData(res, "get:id", taskData);
-        }
-    )
-    .catch((err)=>{
-                console.log("Errrror");
+        })
+    .catch((err) => {
+                console.error(err);
 
                 return apiResponse.errorResponse(res, "Internal Server Error ");
             }
@@ -65,12 +61,12 @@ router.post('/todo', (req, res) => {
     }
 
     taskModul.addTask(req.body.title)
-    .then( (taskData) => {
+    .then((taskData) => {
         console.log("POST DATA:" + taskData);
 
         return apiResponse.successResponseWithData(res, "post",taskData);
     })
-    .catch( (err) => {
+    .catch((err) => {
             console.log("rejectSave:" + err);
 
             return apiResponse.errorResponse(res, "Internal Server Error ");
@@ -78,7 +74,7 @@ router.post('/todo', (req, res) => {
 });
 
 router.put('/todo/:id', (req, res) => {
-    idTask = req.params.id;
+    const idTask = req.params.id;
 
     const schema = Joi.object({
         title: Joi.string().min(3).max(300).required()
@@ -102,8 +98,7 @@ router.put('/todo/:id', (req, res) => {
         console.log(taskData);
 
         return apiResponse.successResponseWithData(res, "put",taskData);
-        }
-    )
+        })
     .catch((err) => {
         console.error(err);
 
@@ -133,5 +128,3 @@ router.delete('/todo/:id', (req, res) => {
 });
 
 module.exports = router;
-
-
