@@ -95,39 +95,35 @@ router.put('/todo/:id', (req, res) => {
     taskModul.editTask(idTask, req.body.title)
     .then((taskData) => {
             if (!taskData) {
-
                 return apiResponse.notFoundResponse(res, "not found object");
-
             }
+
         console.log("PUT DATA:");
         console.log(taskData);
 
         return apiResponse.successResponseWithData(res, "put",taskData);
-
         }
     )
     .catch((err) => {
         console.error(err);
 
         return apiResponse.errorResponse(res, "Internal Server Error ");
-
     });
 });
 
 router.delete('/todo/:id', (req, res) => {
-   
     const idTask = req.params.id;
 
     taskModul.deleteTask(idTask)
     .then((taskData)=>{
         console.log("DELETE DATA:");
-        console.err(taskData);
+        console.error(taskData);
+
         if (taskData.deletedCount === 0) {
             return apiResponse.notFoundResponse(res, "not found object");
           }
 
           return apiResponse.successResponseWithData(res, "delete", taskData);
-
     })
     .catch((err) => {
         console.error(err);
