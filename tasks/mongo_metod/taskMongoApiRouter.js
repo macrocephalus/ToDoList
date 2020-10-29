@@ -64,10 +64,8 @@ router.post('/todo', (req, res) => {
         return apiResponse.validationErrorWithData(res, "Not valid: ", req.body);
     }
 
-    console.log(`reg body ${req.body.title}`);
     taskModul.addTask(req.body.title)
     .then( (taskData) => {
-
         console.log("POST DATA:" + taskData);
 
         return apiResponse.successResponseWithData(res, "post",taskData);
