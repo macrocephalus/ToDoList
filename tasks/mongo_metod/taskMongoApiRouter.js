@@ -14,8 +14,7 @@ router.get('/todo', (req, res) => {
 
     if (Number.isNaN(page) || Number.isNaN(limit) || page <= 0 || limit <= 0)
     {
-       // res.status(400).send("Error parameters");
-        return apiResponse.validationErrorWithData(res, "Error parameters",null);
+        return apiResponse.validationErrorWithData(res, "Error parameters", null);
     }
 
     taskModul.queryTaskPage(page, limit)
@@ -23,7 +22,7 @@ router.get('/todo', (req, res) => {
         {
             console.log("Паггінація");
 
-            return apiResponse.successResponseWithData(res, "pagination",taskData);
+            return apiResponse.successResponseWithData(res, "pagination", taskData);
         }
     )
     .catch(
@@ -31,7 +30,7 @@ router.get('/todo', (req, res) => {
                 console.log("Errrror");
                 console.log(err);
 
-                return apiResponse.errorResponse(res, "Internal Server Error ");
+                return apiResponse.errorResponse(res, "Internal Server Error");
              }
         );
 });
@@ -52,8 +51,6 @@ router.get('/todo/:id', (req, res) => {
         }
     )
     .catch(
-        //вывести помилку!!!!!!!!
-          
              (err)=>{
                 console.log("Errrror");
                 return apiResponse.errorResponse(res, "Internal Server Error ");
@@ -103,7 +100,6 @@ router.put('/todo/:id', (req, res) => {
     if(valid.error)
     {
         console.error(valid.error);
-        //res.status(400).send(valid.error);
         return apiResponse.validationErrorWithData(res, "Not valid: ", req.body);
     }
 
@@ -136,14 +132,15 @@ router.delete('/todo/:id', (req, res) => {
     taskModul.deleteTask(idTask)
     .then((taskData)=>{
         console.log("DELETE DATA:");
-        console.log(taskData);
-        //res.send(taskData);
+        console.err(taskData);
         if (taskData.deletedCount === 0) {
 
             return apiResponse.notFoundResponse(res, "not found object");
 
           }
+
           return apiResponse.successResponseWithData(res, "delete", taskData);
+
     })
     .catch((err) => {
         console.error(err);
