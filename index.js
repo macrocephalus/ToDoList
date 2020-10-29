@@ -1,6 +1,5 @@
 const express = require("express");
 
-const taskAPIRouter = require('./tasks/json_metod/taskAPI');
 const indexRouter = require('./tasks/index');
 const taskController = require('./tasks/mongo_metod/taskController');
 
@@ -23,7 +22,6 @@ mongoose.connect(
 app.use(express.json());
 
 app.use('/', indexRouter);
-app.use('/api/tasks', taskAPIRouter);
 app.use('/api/mongo', taskController);
 
 
