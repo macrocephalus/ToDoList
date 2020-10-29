@@ -18,13 +18,9 @@ mongoose.connect(
     .then(() => console.log(`Now connected to MongoDB! url = ${MONGODB_URL}`))
     .catch(err => console.error('Something went wrong', err));
 
-
 app.use(express.json());
 
 app.use('/', indexRouter);
 app.use('/api/mongo', taskController);
-
-
-
 
 app.listen(PORT, () => { console.log(`Servers start PORT = ${PORT}`) });
