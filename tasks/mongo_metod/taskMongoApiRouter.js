@@ -12,9 +12,7 @@ router.get('/todo', (req, res) => {
     const { page = 1, limit = 50 } = req.query;
 
     if (Number.isNaN(page) || Number.isNaN(limit) || page <= 0 || limit <= 0) {
-
         return apiResponse.validationErrorWithData(res, "Error parameters", null);
-        
     }
 
     taskModul.queryTaskPage(page, limit)
@@ -41,8 +39,7 @@ router.get('/todo/:id', (req, res) => {
     taskModul.getTask(idTask)
     .then(taskData=>
         {
-            if (!taskData)
-            {
+            if (!taskData) { 
                 return apiResponse.notFoundResponse(res, "id not found response",);
             }
 
@@ -65,8 +62,7 @@ router.post('/todo', (req, res) => {
 
     const valid = schema.validate(req.body);
 
-    if(valid.error)
-    {
+    if (valid.error) {
 
         return apiResponse.validationErrorWithData(res, "Not valid: ", req.body);
 
@@ -96,16 +92,15 @@ router.put('/todo/:id', (req, res) => {
 
     const valid = schema.validate(req.body);
 
-    if(valid.error)
-    {
+    if (valid.error) {
         console.error(valid.error);
+
         return apiResponse.validationErrorWithData(res, "Not valid: ", req.body);
     }
 
     taskModul.editTask(idTask, req.body.title)
     .then((taskData) => {
-            if (!taskData)
-            {
+            if (!taskData) {
 
                 return apiResponse.notFoundResponse(res, "not found object");
 
