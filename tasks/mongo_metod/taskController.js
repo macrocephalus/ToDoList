@@ -35,7 +35,7 @@ router.get('/todo/:id', (req, res) => {
     taskService.getTask(idTask)
     .then((taskData) => {
             if (!taskData) { 
-                return apiResponse.notFoundResponse(res, "id not found response",);
+                return apiResponse.notFoundResponse(res, "id not found response");
             }
 
             return apiResponse.successResponseWithData(res, "get:id", taskData);
@@ -63,7 +63,7 @@ router.post('/todo', (req, res) => {
     .then((taskData) => {
         console.log("POST DATA:" + taskData);
 
-        return apiResponse.successResponseWithData(res, "post",taskData);
+        return apiResponse.successResponseWithData(res, "post", taskData);
     })
     .catch((err) => {
             console.log("rejectSave:" + err);
@@ -96,12 +96,12 @@ router.put('/todo/:id', (req, res) => {
         console.log("PUT DATA:");
         console.log(taskData);
 
-        return apiResponse.successResponseWithData(res, "put",taskData);
+        return apiResponse.successResponseWithData(res, "put", taskData);
         })
     .catch((err) => {
         console.error(err);
 
-        return apiResponse.errorResponse(res, "Internal Server Error ");
+        return apiResponse.errorResponse(res, "Internal Server Error");
     });
 });
 
