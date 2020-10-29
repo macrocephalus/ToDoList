@@ -8,25 +8,23 @@ const taskModul = require('./taskControllerMongo');
 
 const router = express.Router();
 
-
 router.get('/todo', (req, res) => {
     const { page = 1, limit = 50 } = req.query;
 
-    if (Number.isNaN(page) || Number.isNaN(limit) || page <= 0 || limit <= 0)
-    {
+    if (Number.isNaN(page) || Number.isNaN(limit) || page <= 0 || limit <= 0) {
+
         return apiResponse.validationErrorWithData(res, "Error parameters", null);
+        
     }
 
     taskModul.queryTaskPage(page, limit)
-    .then(taskData =>
-        {
+    .then((taskData) => {
             console.log("Паггінація");
 
             return apiResponse.successResponseWithData(res, "pagination", taskData);
         }
     )
-    .catch(
-             (err) => {
+    .catch((err) => {
                 console.log("Errrror");
                 console.log(err);
 
@@ -47,12 +45,13 @@ router.get('/todo/:id', (req, res) => {
             {
                 return apiResponse.notFoundResponse(res, "id not found response",);
             }
+
             return apiResponse.successResponseWithData(res, "get:id", taskData);
         }
     )
-    .catch(
-             (err)=>{
+    .catch((err)=>{
                 console.log("Errrror");
+
                 return apiResponse.errorResponse(res, "Internal Server Error ");
             }
         );
@@ -104,7 +103,7 @@ router.put('/todo/:id', (req, res) => {
     }
 
     taskModul.editTask(idTask, req.body.title)
-    .then( (taskData) => {
+    .then((taskData) => {
             if (!taskData)
             {
 
@@ -117,7 +116,8 @@ router.put('/todo/:id', (req, res) => {
         return apiResponse.successResponseWithData(res, "put",taskData);
 
         }
-    ).catch( (err) => {
+    )
+    .catch((err) => {
         console.error(err);
 
         return apiResponse.errorResponse(res, "Internal Server Error ");
@@ -134,9 +134,7 @@ router.delete('/todo/:id', (req, res) => {
         console.log("DELETE DATA:");
         console.err(taskData);
         if (taskData.deletedCount === 0) {
-
             return apiResponse.notFoundResponse(res, "not found object");
-
           }
 
           return apiResponse.successResponseWithData(res, "delete", taskData);
