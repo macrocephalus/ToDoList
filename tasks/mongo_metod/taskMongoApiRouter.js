@@ -32,12 +32,11 @@ router.get('/todo', (req, res) => {
 });
 
 router.get('/todo/:id', (req, res) => {
-
     const idTask = req.params.id;
     console.log("YRAAA");
    
     taskModul.getTask(idTask)
-    .then(taskData=>
+    .then((taskData)=>
         {
             if (!taskData) { 
                 return apiResponse.notFoundResponse(res, "id not found response",);
@@ -55,7 +54,6 @@ router.get('/todo/:id', (req, res) => {
 });
 
 router.post('/todo', (req, res) => {
-  
     const schema = Joi.object({
         title: Joi.string().min(3).max(300).required()
     });
@@ -63,9 +61,7 @@ router.post('/todo', (req, res) => {
     const valid = schema.validate(req.body);
 
     if (valid.error) {
-
         return apiResponse.validationErrorWithData(res, "Not valid: ", req.body);
-
     }
 
     console.log(`reg body ${req.body.title}`);
