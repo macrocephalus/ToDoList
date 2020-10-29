@@ -14,6 +14,7 @@ async function addTask(titleData) {
     return saveTask(task)
         .then((taskData) => { 
             console.log("Add");
+
             logTask(taskData);
         
             return taskData;
@@ -33,6 +34,7 @@ async function saveTask (taskData) {
 
     try {
         const result = await task.save();
+
         console.log(result);
 
         return Promise.resolve(result);
@@ -49,9 +51,11 @@ async function saveTask (taskData) {
  */
 async function queryTaskPage(dataPage, dataLimit) {
     try {
-        const task = await Task.find()
+        const task = await Task
+        .find()
         .skip((dataPage-1)*dataLimit)
         .limit(dataLimit);
+
         console.log("Get Task");
 
         return Promise.resolve(task);
@@ -70,8 +74,7 @@ async function getTask(idTask) {
     try {
         const task = await Task.findById(idTask);
       
-        if (!task)
-        {
+        if (!task) {
             return Promise.resolve(null);
         }
 
@@ -79,7 +82,6 @@ async function getTask(idTask) {
         console.log(task);
 
         return Promise.resolve(task);
-    
     } catch (err) {
         console.log(err.message);
 
@@ -92,11 +94,16 @@ async function getTask(idTask) {
  */
 async function editTask(idTask, dataTitle) {
     try {
-        const task = await Task.findByIdAndUpdate({ _id: idTask }, {
+        const task = await Task.findByIdAndUpdate(
+            { _id: idTask }, 
+            {
             $set: {
                 title: dataTitle
             }
-        }, { new: true });
+        },
+        { new: true }
+        );
+
         console.log(task);
         
         return Promise.resolve(task);
@@ -113,11 +120,11 @@ async function editTask(idTask, dataTitle) {
 async function deleteTask(idTask) {
     try {
         const result = await Task.deleteOne({ _id: idTask });
+
         console.log("Delete");
         console.log(result);
 
         return Promise.resolve(result);
-
     } catch (err) {
         console.log(err.message);
 
