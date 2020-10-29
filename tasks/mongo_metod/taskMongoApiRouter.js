@@ -4,7 +4,7 @@ const Joi = require('joi');
 
 const apiResponse = require('../helpers/apiResponse');
 
-const taskModul = require('./taskControllerMongo'); 
+const taskService = require('./taskService'); 
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.get('/todo', (req, res) => {
         return apiResponse.validationErrorWithData(res, "Error parameters", null);
     }
 
-    taskModul.queryTaskPage(page, limit)
+    taskService.queryTaskPage(page, limit)
     .then((taskData) => {
             console.log("Паггінація");
 
@@ -32,7 +32,7 @@ router.get('/todo', (req, res) => {
 router.get('/todo/:id', (req, res) => {
     const idTask = req.params.id;
    
-    taskModul.getTask(idTask)
+    taskService.getTask(idTask)
     .then((taskData) => {
             if (!taskData) { 
                 return apiResponse.notFoundResponse(res, "id not found response",);
@@ -59,7 +59,7 @@ router.post('/todo', (req, res) => {
         return apiResponse.validationErrorWithData(res, "Not valid: ", req.body);
     }
 
-    taskModul.addTask(req.body.title)
+    taskService.addTask(req.body.title)
     .then((taskData) => {
         console.log("POST DATA:" + taskData);
 
@@ -87,7 +87,7 @@ router.put('/todo/:id', (req, res) => {
         return apiResponse.validationErrorWithData(res, "Not valid: ", req.body);
     }
 
-    taskModul.editTask(idTask, req.body.title)
+    taskService.editTask(idTask, req.body.title)
     .then((taskData) => {
             if (!taskData) {
                 return apiResponse.notFoundResponse(res, "not found object");
@@ -108,7 +108,7 @@ router.put('/todo/:id', (req, res) => {
 router.delete('/todo/:id', (req, res) => {
     const idTask = req.params.id;
 
-    taskModul.deleteTask(idTask)
+    taskService.deleteTask(idTask)
     .then((taskData) => {
         console.log("DELETE DATA:");
         console.error(taskData);
