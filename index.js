@@ -21,6 +21,6 @@ mongoose.connect(
 app.use(express.json());
 
 app.use('/', indexRouter);
-app.use('/api/mongo', taskController);
+app.use('/api', taskController);
 
 app.listen(PORT, () => { console.log(`Servers start PORT = ${PORT}`) });
