@@ -2,14 +2,20 @@ const express = require("express");
 
 const Joi = require('joi');
 
-const taskModul = require('../tasks/taskControllerMongo'); 
+const taskModul = require('./task'); //???? для відносного шляшу починаємо з ..   а . з поточного
 
 const router = express.Router();
 
+router.get('/', (req, res) => {
+    
+    const tasks = taskModul.fetchTask();
 
-router.get('/todo', (req, res) => {
+    res.send(tasks);
+});
 
-    const { page = 1, limit = 10 } = req.query;
+router.get('/page', (req, res) => {
+
+    const { page = 1, limit = 50 } = req.query;
 
     if (Number.isNaN(page) || Number.isNaN(limit) || page <= 0 || limit <= 0)
     {
@@ -20,7 +26,7 @@ router.get('/todo', (req, res) => {
     res.send(simple);
 });
 
-router.get('todo/:id',(req, res) => {
+router.get('/:id',(req, res) => {
     const idTask = parseInt(req.params.id);
 
     if (Number.isNaN(idTask))
@@ -40,7 +46,7 @@ router.get('todo/:id',(req, res) => {
     res.send(task);
 });
 
-router.post('/todo', (req, res) => {
+router.post('/', (req, res) => {
   
     const schema = Joi.object({
         title: Joi.string().min(3).max(300).required()
@@ -51,23 +57,15 @@ router.post('/todo', (req, res) => {
     if(valid.error)
     {
         res.status(400).send(valid.error);
-
         return valid.error;
     }
 
-    console.log(`reg body ${req.body.title}`);
-    taskModul.addTask(req.body.title).then((taskData)=>{
+    const task = taskModul.addTask(req.body.title);
 
-        console.log("PUT DATA:" + taskData);
-        res.send(taskData);
-    })
-    .catch((err) => {
-            console.log("rejectSave:" + err);
-            //висести ошибку
-        });
+    res.send(task);
 });
 
-router.put('/todo/:id', (req, res) => {
+router.put('/:id', (req, res) => {
     idTask = parseInt(req.params.id);
 
     const schema = Joi.object({
@@ -95,7 +93,7 @@ router.put('/todo/:id', (req, res) => {
     res.send(task);
 });
 
-router.delete('todo/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
    
     const idTask = parseInt(req.params.id);
 
