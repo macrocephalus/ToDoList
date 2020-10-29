@@ -2,25 +2,18 @@ const fs = require('fs');
 
 const Task = require('./taskModel');
 
-/*function taskData(data) {
-	this.id = data._id;
-	this.title= data.title;
-}*/
-
 /**
  * 
  * Додає нове завдання
  */
 async function addTask(titleData) {
-
     const task = {
         title : titleData
     };
 
-    return saveTask(task)         //тут потрібно await ???
+    return saveTask(task)
         .then((taskData) => { 
             console.log("Add");
-            
             logTask(taskData);
         
             return taskData;
@@ -30,7 +23,7 @@ async function addTask(titleData) {
 
             return Promise.reject(err);
         });
-};
+}
 
 /** 
  * Зберігає в Mongo
@@ -38,8 +31,6 @@ async function addTask(titleData) {
 async function saveTask (taskData) {
     const task = new Task(taskData);
 
-    //return task.save();
- 
     try {
         const result = await task.save();
         console.log(result);
@@ -48,9 +39,10 @@ async function saveTask (taskData) {
 
     } catch (err) {
         console.log(err.message)
+
         return Promise.reject(err);
     }
-};
+}
 
 /**
  *  Запит який повертає масив значень по номеру сторінки і кільсоксті записів
@@ -60,15 +52,13 @@ async function queryTaskPage(dataPage, dataLimit) {
         const task = await Task.find()
         .skip((dataPage-1)*dataLimit)
         .limit(dataLimit);
-
         console.log("Get Task");
-       // console.log(task);
 
-       // logTask(task[0]);
         return Promise.resolve(task);
     
     } catch (err) {
         console.log(err.message);
+
         return Promise.reject(err);
     }
 } 
@@ -77,7 +67,6 @@ async function queryTaskPage(dataPage, dataLimit) {
  * Повертає таск по id
  */
 async function getTask(idTask) {
-
     try {
         const task = await Task.findById(idTask);
       
@@ -89,11 +78,11 @@ async function getTask(idTask) {
         console.log("Get Task");
         console.log(task);
 
-      //  logTask(task[0]);
         return Promise.resolve(task);
     
     } catch (err) {
         console.log(err.message);
+
         return Promise.reject(err);
     }
 }
@@ -102,7 +91,6 @@ async function getTask(idTask) {
  * Редагує таск по id
  */
 async function editTask(idTask, dataTitle) {
-
     try {
         const task = await Task.findByIdAndUpdate({ _id: idTask }, {
             $set: {
@@ -123,17 +111,16 @@ async function editTask(idTask, dataTitle) {
  * Видаляє тас по id
  */
 async function deleteTask(idTask) {
-
     try {
         const result = await Task.deleteOne({ _id: idTask });
-
         console.log("Delete");
         console.log(result);
 
         return Promise.resolve(result);
 
     } catch (err) {
-        console.log(err.message)
+        console.log(err.message);
+
         return Promise.reject(err);
     }
 }
@@ -144,7 +131,6 @@ function logTask(task) {
     console.log('----------');
     console.log(`id: ${task._id}`);
     console.log(`title: ${task.title}`);
-    
 }
 
 module.exports = {
