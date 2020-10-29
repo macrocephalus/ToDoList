@@ -38,7 +38,6 @@ async function saveTask (taskData) {
         console.log(result);
 
         return Promise.resolve(result);
-
     } catch (err) {
         console.log(err.message)
 
@@ -59,7 +58,6 @@ async function queryTaskPage(dataPage, dataLimit) {
         console.log("Get Task");
 
         return Promise.resolve(task);
-    
     } catch (err) {
         console.log(err.message);
 
