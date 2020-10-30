@@ -1,0 +1,19 @@
+{
+    "errNote": {
+      "e400" :"Error parameters",
+      "e404" : "Not found response",
+      "e500" : "Internal Server Error"
+
+    },
+    "successNote": {
+        "pagination" : "pagination",
+        "getId" : "get:id",
+        "post" : "post",
+        "put" : "put",
+        "delete" : "delete"
+
+      }
+  
+
+  }
+  
