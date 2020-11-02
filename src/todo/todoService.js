@@ -1,21 +1,21 @@
 const fs = require('fs');
 
-const Task = require('./taskModel');
+const Todo = require('./todoModel');
 
 /**
  * 
  * Додає нове завдання
  */
-async function addTask(titleData) {
+async function addTodo(titleData) {
     const task = {
         title : titleData
     };
 
-    return saveTask(task)
+    return saveTodo(task)
         .then((taskData) => { 
             console.log("Add");
 
-            logTask(taskData);
+            logTodo(taskData);
         
             return taskData;
          })
@@ -29,8 +29,8 @@ async function addTask(titleData) {
 /** 
  * Зберігає в Mongo
 */
-async function saveTask (taskData) {
-    const task = new Task(taskData);
+async function saveTodo (taskData) {
+    const task = new Todo(taskData);
 
     try {
         const result = await task.save();
@@ -48,9 +48,9 @@ async function saveTask (taskData) {
 /**
  *  Запит який повертає масив значень по номеру сторінки і кільсоксті записів
  */
-async function queryTaskPage(dataPage, dataLimit) {
+async function getTodos(dataPage, dataLimit) {
     try {
-        const task = await Task
+        const task = await Todo
         .find()
         .skip((dataPage-1)*dataLimit)
         .limit(dataLimit);
@@ -68,9 +68,9 @@ async function queryTaskPage(dataPage, dataLimit) {
 /**
  * Повертає таск по id
  */
-async function getTask(idTask) {
+async function getTodo(idTask) {
     try {
-        const task = await Task.findById(idTask);
+        const task = await Todo.findById(idTask);
       
         if (!task) {
             return Promise.resolve(null);
@@ -90,9 +90,9 @@ async function getTask(idTask) {
 /**
  * Редагує таск по id
  */
-async function editTask(idTask, dataTitle) {
+async function editTodo(idTask, dataTitle) {
     try {
-        const task = await Task.findByIdAndUpdate(
+        const task = await Todo.findByIdAndUpdate(
             { _id: idTask }, 
             {
             $set: {
@@ -115,9 +115,9 @@ async function editTask(idTask, dataTitle) {
 /**
  * Видаляє тас по id
  */
-async function deleteTask(idTask) {
+async function deleteTodo(idTask) {
     try {
-        const result = await Task.deleteOne({ _id: idTask });
+        const result = await Todo.deleteOne({ _id: idTask });
 
         console.log("Delete");
         console.log(result);
@@ -132,16 +132,16 @@ async function deleteTask(idTask) {
 /**
  * Виведнння таску в консоль
  */
-function logTask(task) {
+function logTodo(task) {
     console.log('----------');
     console.log(`id: ${task._id}`);
     console.log(`title: ${task.title}`);
 }
 
 module.exports = {
-    addTask,
-    deleteTask,
-    queryTaskPage,
-    getTask,
-    editTask,
+    addTodo,
+    deleteTodo,
+    getTodos,
+    getTodo,
+    editTodo,
 };
